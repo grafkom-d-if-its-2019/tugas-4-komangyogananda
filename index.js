@@ -301,18 +301,40 @@
     );
     gl.uniformMatrix4fv(pmLoc, false, pm);
 
-    // Kontrol menggunakan keyboard
-    function onKeyDown(event) {
-      if (event.key == "-") thetaSpeed -= 0.01;
-      if (event.key == "=") thetaSpeed += 0.01;
-      if (event.key == "0") thetaSpeed = 0; // key '0'
-      if (event.key == "a") axis[x] = !axis[x];
-      if (event.key == "s") axis[y] = !axis[y];
-      if (event.key == "d") axis[z] = !axis[z];
-      if (event.key == "ArrowUp") camera.z -= 0.1;
-      else if (event.key == "ArrowDown") camera.z += 0.1;
+    // Kontrol menggunakan mouse
+    var lastMousePosition = {
+      x: 0,
+      y: 0
+    };
+    var isDragging = false;
+    function onMouseDown(event) {
+      isDragging = true;
     }
-    document.addEventListener("keydown", onKeyDown);
+    function toRadians(angle) {
+      return angle * (Math.PI / 180);
+    }
+    function onMouseMove(event) {
+      event.preventDefault();
+      deltaMove = {
+        x: event.x - lastMousePosition.x,
+        y: event.y - lastMousePosition.y
+      };
+      if (isDragging) {
+        glMatrix.mat4.rotateX(modelMatrix, modelMatrix, toRadians(deltaMove.y));
+        glMatrix.mat4.rotateY(modelMatrix, modelMatrix, toRadians(deltaMove.x));
+      }
+      lastMousePosition = {
+        x: event.x,
+        y: event.y
+      };
+    }
+    function onMouseUp(event) {
+      event.preventDefault();
+      isDragging = false;
+    }
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
 
     function detectCollision() {
       for (var i = 0; i < currentPositionK.length; i++) {
@@ -374,10 +396,6 @@
     var rotateK = 0;
 
     function drawCube() {
-      theta += thetaSpeed;
-      if (axis[z]) glMatrix.mat4.rotateZ(modelMatrix, modelMatrix, thetaSpeed);
-      if (axis[y]) glMatrix.mat4.rotateY(modelMatrix, modelMatrix, thetaSpeed);
-      if (axis[x]) glMatrix.mat4.rotateX(modelMatrix, modelMatrix, thetaSpeed);
       gl.uniformMatrix4fv(mmLoc, false, modelMatrix);
       gl.drawArrays(gl.LINES, 0, cubeSize);
       currentPositionCube = [];

@@ -1,3 +1,3 @@
-# Tugas 3 Grafkom D
+# Tugas 4 Grafkom D
 
-## Komang Yogananda Mahaputra Wisna - 05111740000114"# tugas-4-komangyogananda" 
+## Komang Yogananda Mahaputra Wisna - 05111740000114
