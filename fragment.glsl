@@ -1,6 +1,7 @@
 precision mediump float;
 
 varying vec3 fNormal;
+varying vec3 fColor;
 varying vec3 fPosition;
 varying vec2 fTexCoord;
 
@@ -25,5 +26,5 @@ void main() {
   vec3 diffuse = diffuseColor * textureColor.rgb * normalDotLight;
   vec3 ambient = ambientColor * textureColor.rgb;
 
-  gl_FragColor = vec4(diffuse + ambient, 1.0);
+  gl_FragColor = vec4(diffuse + ambient + fColor, 1.0);
 }

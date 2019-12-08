@@ -2,9 +2,11 @@ precision mediump float;
 
 attribute vec3 vPosition;
 attribute vec3 vNormal;
+attribute vec3 vColor;
 attribute vec2 vTexCoord;
 
 varying vec3 fNormal;
+varying vec3 fColor;
 varying vec3 fPosition;
 varying vec2 fTexCoord;
 
@@ -18,7 +20,7 @@ void main() {
 
   // Transfer koordinat tekstur ke fragment shader
   fTexCoord = vTexCoord;
-
+  fColor = vColor;
   // Transfer vektor normal (yang telah ditransformasi) ke fragment shader
   fNormal = normalize(normalMatrix * vNormal);
 
