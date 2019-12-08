@@ -527,9 +527,6 @@
     function onMouseDown(event) {
       isDragging = true;
     }
-    function toRadians(angle) {
-      return angle * (Math.PI / 180);
-    }
     function onMouseMove(event) {
       event.preventDefault();
       deltaMove = {
@@ -537,8 +534,14 @@
         y: event.y - lastMousePosition.y
       };
       if (isDragging) {
-        glMatrix.mat4.rotateX(modelMatrix, modelMatrix, toRadians(deltaMove.y));
-        glMatrix.mat4.rotateY(modelMatrix, modelMatrix, toRadians(deltaMove.x));
+        var radx = glMatrix.glMatrix.toRadian(deltaMove.x);
+        var rady = glMatrix.glMatrix.toRadian(deltaMove.y);
+        var quat = glMatrix.quat.create();
+        glMatrix.quat.rotateX(quat, quat, rady);
+        glMatrix.quat.rotateY(quat, quat, radx);
+        var rotateMat = glMatrix.mat4.create();
+        glMatrix.mat4.fromQuat(rotateMat, quat);
+        glMatrix.mat4.multiply(modelMatrix, modelMatrix, rotateMat);
       }
       lastMousePosition = {
         x: event.x,
